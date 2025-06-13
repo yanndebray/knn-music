@@ -1,7 +1,24 @@
 
 # K\-NN explained
 
-Explain K\-Nearest Neighbors with music
+Explain K\-Nearest Neighbors to recommend music
+
+<a name="beginToc"></a>
+
+## Table of Contents
+&emsp;&emsp;[Setup](#setup)
+ 
+&emsp;&emsp;[Gentle intro](#gentle-intro)
+ 
+&emsp;&emsp;[Audio Features](#audio-features)
+ 
+&emsp;&emsp;[Index playlist](#index-playlist)
+ 
+&emsp;&emsp;[Recommendation](#recommendation)
+ 
+&emsp;&emsp;[Utils](#utils)
+ 
+<a name="endToc"></a>
 
 ## Setup
 
@@ -17,7 +34,8 @@ Get secrets from [developer.spotify.com](https://developer.spotify.com/)
 loadenv(".env")
 sp = createSpotifyClient(getenv("clientId"),getenv("clientSecret"));
 ```
-## Search
+
+## Gentle intro
 ```matlab
 query = "lucy in the sky with diamonds";
 % query = "shine on your crazy diamonds";
@@ -43,6 +61,7 @@ imshow(imread(result.album_url))
 
 ![figure_0.png](README_media/figure_0.png)
 
+## Audio Features
 ```matlab
 track_features = getFeatures(sp,result.track_id)
 ```
@@ -64,6 +83,56 @@ plotFeatures(track_features)
 ```
 
 ![figure_1.png](README_media/figure_1.png)
+
+## Index playlist
+```matlab
+playlist = readtable("music/data/streaming_history.csv","TextType","string");
+playlistIds = playlist.id;
+features = table2array(playlist(:,{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'}))
+```
+
+```matlabTextOutput
+features = 61x7
+    0.8870    0.3890    0.3960         0    0.0828    0.0332    0.5850
+    0.7000    0.6080    0.3220    0.0030    0.0724    0.0431    0.2740
+    0.0015    0.5140    0.7300    0.0001    0.0897    0.0598    0.3340
+    0.5250    0.6700    0.3650         0    0.0575    0.0564    0.4500
+    0.6000    0.7910    0.3290    0.8630    0.1930    0.0592    0.5260
+    0.0211    0.4960    0.7390    0.0044    0.1060    0.0415    0.3780
+    0.4250    0.5320    0.6630    0.0000    0.0734    0.0292    0.7560
+    0.0561    0.6480    0.7850         0    0.1480    0.1650    0.9430
+    0.0229    0.3340    0.8100         0    0.3130    0.0380    0.6320
+    0.0209    0.4170    0.6300    0.0134    0.0543    0.0898    0.3410
+
+```
+
+```matlab
+knnModel = createns(features,'Distance','cosine');
+```
+
+## Recommendation
+```matlab
+playlist{1,"name"} % seed
+```
+
+```matlabTextOutput
+ans = "The Times They Are A-Changin'"
+```
+
+```matlab
+k = 5;
+[indices, ~] = knnsearch(knnModel, features(1,:), 'K', k +1);
+recoIds = playlistIds(indices(2:end));
+playlist(ismember(playlist.id, recoIds),"name")
+```
+| |name|
+|:--:|:--:|
+|1|"The Wind"|
+|2|"A Horse with No Name"|
+|3|"Angie"|
+|4|"Take Five"|
+|5|"La bohème"|
+
 ## Utils
 ```matlab
 function sp = createSpotifyClient(clientId,clientSecret)
