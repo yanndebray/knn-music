@@ -37,25 +37,30 @@ sp = createSpotifyClient(getenv("clientId"),getenv("clientSecret"));
 
 ## Gentle intro
 ```matlab
-query = "lucy in the sky with diamonds";
-% query = "shine on your crazy diamonds";
+query = "times there are a changin";
+% query = "lucy in the sky with diamonds";
 T = searchTrack(sp,query)
 ```
 | |track_id|track_name|artist_name|album_name|album_url|
 |:--:|:--:|:--:|:--:|:--:|:--:|
-|1|"7ioKlCkz1gjZmOBLU1mP1Z"|"Lucy in the Sky with Diamonds (Live)"|"Katie Melua"|"B-Sides: The Tracks That Got Away"|"https://i.scdn.co/image/ab67616d00001e022e524a09b1105d15fcbc4c2d"|
-|2|"25yQPHgC35WNnnOUqFhgVR"|"Lucy In The Sky With Diamonds - Remastered 2009"|"The Beatles"|"Sgt. Pepper's Lonely Hearts Club Band (Remastered)"|"https://i.scdn.co/image/ab67616d00001e0234ef8f7d06cf2fc2146f420a"|
-|3|"6ayD6m0NsLwSEclhTaSAvX"|"Lucy In The Sky With Diamonds"|"The Chris Eagan Project"|"Beatles Guitar Tracks - My Way"|"https://i.scdn.co/image/ab67616d00001e02f57ef327a555ac893d5d8606"|
-|4|"0YG4aZm33LuWiHhlwdSgVI"|"NeoVanDeeAvatar"|"Flow_GPo.eth.oven"|"WelComeBackMyDeer - Marcel Hirscher"|"https://i.scdn.co/image/ab67616d00001e025ab6bf3d9a96f76f0f305ba6"|
-|5|"5wLkhxwU7B9DNglfZAIrQ8"|"Lucy In The Sky With Diamonds"|"The Beatles"|"Yellow Submarine Songtrack"|"https://i.scdn.co/image/ab67616d00001e02d807dd713cdfbeed142881e2"|
-|6|"09NgjM6dqRqCReWIZL2l0W"|"Lucy in the Sky with Diamonds"|"Frank Arricale"|"Off the Beatle Track"|"https://i.scdn.co/image/ab67616d00001e02040d0d9181d5bdd1b1be06ff"|
-|7|"6KDhd9lR1JR41ZgrOfGmKj"|"Lucy in the Sky With Diamonds"|"101 Strings Orchestra"|"The Beatles played by the 101 Strings Orchestra"|"https://i.scdn.co/image/ab67616d00001e021daf1435bd5cf31668d349e6"|
-|8|"7eyNpJhRRm3q8uHLkrFzmQ"|"Lucy In The Sky With Diamonds - From "Across The Universe" Soundtrack"|"Bono"|"Across The Universe"|"https://i.scdn.co/image/ab67616d00001e025c3e6bc8c0ddcc78d85fac6a"|
-|9|"15KTU3BWhyY02oN9VBuHOM"|"Lucy in the Sky With Diamonds (In the Style of the Beatles) [Performance Track with Demonstration Vocals]"|"Done Again"|"Lucy in the Sky With Diamonds (In the Style of the Beatles) [Performance Track with Demonstration Vocals]"|"https://i.scdn.co/image/ab67616d00001e0299be84b01f2d124a0dbfae96"|
-|10|"5b63KquzbqgfE4k6KFUaV7"|"Lucy in the Sky With Diamonds"|"101 Strings Orchestra"|"Easy Listening: Songs of The Beatles"|"https://i.scdn.co/image/ab67616d00001e02c785501c0f3ea71b8796e7be"|
+|1|"0HaSK4Tw1IHqvyoYJTqoYz"|"Seize the Night"|"Will Varley"|"Postcards from Ursa Minor"|"https://i.scdn.co/image/ab67616d00001e02e687b505e69d3937acadd092"|
+|2|"52vA3CYKZqZVdQnzRrdZt6"|"The Times They Are A-Changin'"|"Bob Dylan"|"The Times They Are A-Changin'"|"https://i.scdn.co/image/ab67616d00001e023b812eed53f0d7e134fe446e"|
+|3|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
+|4|"2ekvSQupVG7X88fjjdYScf"|"Times Are Changing"|"Astrality"|"Times Are Changing"|"https://i.scdn.co/image/ab67616d00001e02309cdb3f797f58db6e0465b2"|
+|5|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
+|6|"3Oj3qgVvYddVbPrNBDEWO3"|"The Times They Are a-Changin’"|"Viktor Kvist"|"The Times They Are a-Changin’"|"https://i.scdn.co/image/ab67616d00001e02f8ef673176fdf7a8358cbcde"|
+|7|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
+|8|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|9|"4yGS6Y7ygZJ4l5wnVfbPwz"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By"|"https://i.scdn.co/image/ab67616d00001e021ee769ec169b3dd47257d671"|
+|10|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
 
 ```matlab
-result =  T(2,:);
+max_v = height(T);
+```
+
+```matlab
+v = 2;
+result =  T(v,:);
 imshow(imread(result.album_url))
 ```
 
@@ -68,13 +73,13 @@ track_features = getFeatures(sp,result.track_id)
 
 ```matlabTextOutput
 track_features = struct with fields:
-        acousticness: 0.0469
-        danceability: 0.3110
-              energy: 0.3250
+        acousticness: 0.8870
+        danceability: 0.3890
+              energy: 0.3960
     instrumentalness: 0
-            liveness: 0.1390
-         speechiness: 0.0283
-             valence: 0.6680
+            liveness: 0.0828
+         speechiness: 0.0332
+             valence: 0.5850
 
 ```
 
@@ -123,15 +128,44 @@ ans = "The Times They Are A-Changin'"
 k = 5;
 [indices, ~] = knnsearch(knnModel, features(1,:), 'K', k +1);
 recoIds = playlistIds(indices(2:end));
-playlist(ismember(playlist.id, recoIds),"name")
+playlist(indices,"name")
 ```
 | |name|
 |:--:|:--:|
-|1|"The Wind"|
-|2|"A Horse with No Name"|
+|1|"The Times They Are A-Changin'"|
+|2|"La bohème"|
 |3|"Angie"|
 |4|"Take Five"|
-|5|"La bohème"|
+|5|"The Wind"|
+|6|"A Horse with No Name"|
+
+```matlab
+r = 1;
+dispTrackDetails(sp,recoIds(r))
+```
+
+```matlabTextOutput
+Track: La bohème
+Album: La Bohème (Remastered 2014)
+Artist: Charles Aznavour
+URL: https://open.spotify.com/track/2o0hVSbnkdvDDKKVNaUxnB
+```
+
+![figure_2.png](README_media/figure_2.png)
+
+```matlab
+recoFeatures = playlist([1,indices(r+1)],{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'})
+```
+| |acousticness|danceability|energy|instrumentalness|liveness|speechiness|valence|
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|1|0.8870|0.3890|0.3960|0|0.0828|0.0332|0.5850|
+|2|0.8080|0.3770|0.3370|0|0.2380|0.0341|0.5450|
+
+```matlab
+plotMultipleFeatures(recoFeatures)
+```
+
+![figure_3.png](README_media/figure_3.png)
 
 ## Utils
 ```matlab
@@ -242,6 +276,102 @@ function plotFeatures(track_features)
     % title('Track Feature Radar Chart');
     hold off;
 end
+
+function plotMultipleFeatures(trackFeatures)
+    % PLOTMULTIPLEFEATURES   Radar chart of track features for multiple tracks.
+    %
+    %   plotMultipleFeatures(trackFeatures) draws a radar chart where each row of
+    %   the input table trackFeatures is one “track” and each variable (column)
+    %   is a feature (assumed on a comparable scale, e.g. 0–1).
+    %
+    %   The table may optionally have RowNames, which will be used in the legend.
+    %
+    % Example:
+    %   % construct a table of two tracks and seven features
+    %   T = array2table([0.5 0.6 0.3 0.2 0.7 0.1 0.9;
+    %                    0.8 0.4 0.5 0.3 0.6 0.2 0.4], ...
+    %       'VariableNames',{'danceability','energy','speechiness', ...
+    %                        'acousticness','instrumentalness','liveness','valence'}, ...
+    %       'RowNames',{'TrackA','TrackB'});
+    %   plotMultipleFeatures(T);
+
+    % 1) Extract data
+    [nTracks, nVars] = size(trackFeatures);
+    labels = trackFeatures.Properties.VariableNames;
+    stats  = table2array(trackFeatures);      % nTracks x nVars
+
+    % 2) Angle for each axis (close the loop by repeating the first angle at end)
+    theta = linspace(0, 2*pi, nVars+1);
+
+    % 3) Prepare figure
+    figure('Position',[100 100 600 600]);
+    hold on;
+    axis equal off;
+
+    % 4) Draw radial grid
+    maxR   = max(stats(:));
+    rTicks = linspace(0, maxR, 5);          % e.g. 5 rings
+    tGrid  = linspace(0,2*pi,200);
+    for r = rTicks
+        plot(r*cos(tGrid), r*sin(tGrid), ':','LineWidth',1,'Color',[0.8 0.8 0.8]);
+    end
+
+    % 5) Draw spokes
+    for k = 1:nVars
+        th = theta(k);
+        plot([0 cos(th)], [0 sin(th)], '-','LineWidth',1,'Color',[0.8 0.8 0.8]);
+    end
+
+    % 6) Plot each track
+    colors = lines(nTracks);    % distinct colors
+    if ~isempty(trackFeatures.Properties.RowNames)
+        legendNames = trackFeatures.Properties.RowNames;
+    else
+        legendNames = arrayfun(@(i) sprintf('Track %d',i),1:nTracks,'Uni',false);
+    end
+
+    hLines = gobjects(nTracks,1);
+    for i = 1:nTracks
+        rho = [stats(i,:), stats(i,1)];          % close loop
+        [x, y] = pol2cart(theta, rho);
+        fill(x, y, colors(i,:), 'FaceAlpha',0.25, 'EdgeColor','none');
+        plot(x, y, '-o', 'LineWidth',2, 'Color',colors(i,:));
+        % draw line + markers, set DisplayName for legend
+        hLines(i) = plot(x,y,'-o','LineWidth',2, ...
+                         'Color',colors(i,:), ...
+                         'DisplayName',legendNames{i});
+    end
+
+    % 7) Feature labels just outside the outermost ring
+    labelR = maxR * 1.1;
+    for k = 1:nVars
+        th = theta(k);
+        text(labelR*cos(th), labelR*sin(th), labels{k}, ...
+             'FontSize',12, 'HorizontalAlignment','center');
+    end
+
+    % 8) Radial tick labels (at a fixed angle)
+    labelAngle = deg2rad(250);
+    for r = rTicks
+        text(r*cos(labelAngle), r*sin(labelAngle), sprintf('%.2f', r), ...
+             'FontSize',10, 'Color',[0.4 0.4 0.4], ...
+             'HorizontalAlignment','center');
+    end
+
+    % 9) Add legend
+    legend(hLines, 'Location','westoutside');
+    hold off;
+end
+
+function dispTrackDetails(sp,track_id)
+    track = sp.track(track_id);
+    disp("Track: "+string(track{'name'}))
+    disp("Album: "+string(track{'album'}{'name'}))
+    disp("Artist: "+string(track{'artists'}{1}{'name'}))
+    disp("URL: "+string(track{'external_urls'}{'spotify'}))
+    imshow(imread(string(track{'album'}{'images'}{2}{'url'})))
+end
+
 ```
 
 ```matlab
