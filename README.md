@@ -14,7 +14,7 @@ Explain K\-Nearest Neighbors to recommend music
  
 &emsp;&emsp;[Recommendation](#recommendation)
  
-&emsp;&emsp;[Utils](#utils)
+&emsp;&emsp;[Helpers](#helpers)
  
 <a name="endToc"></a>
 
@@ -35,7 +35,7 @@ sp = createSpotifyClient(getenv("clientId"),getenv("clientSecret"));
 
 ## Search track
 ```matlab
-query = "times there are a changin ";
+query = "times there are a changin";
 % query = "lucy in the sky with diamonds";
 T = searchTrack(sp,query)
 ```
@@ -46,11 +46,11 @@ T = searchTrack(sp,query)
 |3|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
 |4|"2ekvSQupVG7X88fjjdYScf"|"Times Are Changing"|"Astrality"|"Times Are Changing"|"https://i.scdn.co/image/ab67616d00001e02309cdb3f797f58db6e0465b2"|
 |5|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
-|6|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|6|"3Oj3qgVvYddVbPrNBDEWO3"|"The Times They Are a-Changin’"|"Viktor Kvist"|"The Times They Are a-Changin’"|"https://i.scdn.co/image/ab67616d00001e02f8ef673176fdf7a8358cbcde"|
 |7|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
-|8|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
-|9|"4yGS6Y7ygZJ4l5wnVfbPwz"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By"|"https://i.scdn.co/image/ab67616d00001e021ee769ec169b3dd47257d671"|
-|10|"4fYeRpiNyejUfkgskbhqmz"|"The Times They Are a-Changin (Campaign Zero)"|"Goth Babe"|"The Times They Are a-Changin (Campaign Zero)"|"https://i.scdn.co/image/ab67616d00001e022b86118a6322dd163546fb70"|
+|8|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|9|"1rjv0ZWcj1WcqmzbbUuEBa"|"Let Me Get By - Live"|"Tedeschi Trucks Band"|"Live From The Fox Oakland"|"https://i.scdn.co/image/ab67616d00001e02b96fc3a0ecdea201ca7ec305"|
+|10|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
 
 ```matlab
 max_v = height(T);
@@ -133,7 +133,20 @@ plotMultipleFeatures(recoFeatures)
 
 ![figure_3.png](README_media/figure_3.png)
 
-## Utils
+## Helpers
+
+Feature definitions:
+
+-  **acousticness**: Confidence measure from 0.0 to 1.0 on if a track is acoustic. 
+-  **danceability**: Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable. 
+-  **energy**: Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy. 
+-  **instrumentalness**: Predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly “vocal”. The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0. 
+-  **liveness**: Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live. 
+-  **speechiness**: Speechiness detects the presence of spoken words in a track. The more exclusively speech\-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non\-speech\-like tracks. 
+-  **valence**: A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry). 
+
+"Show must go on"
+
 ```matlab
 function sp = createSpotifyClient(clientId,clientSecret)
     spotipy = py.importlib.import_module('spotipy');
@@ -342,23 +355,4 @@ end
 
 ```matlab
 export livescript.mlx README.md;
-```
-
-```matlabTextOutput
-Index exceeds array bounds.
-
-Error in latex2markdown (line 229)
-    markdown = latexTabular2Markdown(markdown, alignments{k}, tabulars{k}, options);
-
-Error in convertLaTeX2Markdown (line 99)
-mdText = latex2markdown(texText, texFilename, options{:});
-
-Error in matlab.desktop.editor.export.MarkdownExporter/export (line 53)
-            result = convertLaTeX2Markdown(newOptions);
-
-Error in matlab.desktop.editor.internal.exportDocumentByID (line 89)
-  result = exporter.export(editorID, options);
-
-Error in export (line 148)
-outputAbsoluteFilename = matlab.desktop.editor.internal.exportDocumentByID(id, options{:});
 ```
