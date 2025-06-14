@@ -8,11 +8,9 @@ Explain K\-Nearest Neighbors to recommend music
 ## Table of Contents
 &emsp;&emsp;[Setup](#setup)
  
-&emsp;&emsp;[Gentle intro](#gentle-intro)
+&emsp;&emsp;[Search track](#search-track)
  
 &emsp;&emsp;[Audio Features](#audio-features)
- 
-&emsp;&emsp;[Index playlist](#index-playlist)
  
 &emsp;&emsp;[Recommendation](#recommendation)
  
@@ -22,22 +20,22 @@ Explain K\-Nearest Neighbors to recommend music
 
 ## Setup
 
-Python environment
+Install Spotipy
 
 ```matlab
 setup_python
 ```
 
-Get secrets from [developer.spotify.com](https://developer.spotify.com/) 
+Get secrets from [developer.spotify.com](https://developer.spotify.com/) and store in `.env` file.
 
 ```matlab
 loadenv(".env")
 sp = createSpotifyClient(getenv("clientId"),getenv("clientSecret"));
 ```
 
-## Gentle intro
+## Search track
 ```matlab
-query = "times there are a changin";
+query = "times there are a changin ";
 % query = "lucy in the sky with diamonds";
 T = searchTrack(sp,query)
 ```
@@ -48,11 +46,11 @@ T = searchTrack(sp,query)
 |3|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
 |4|"2ekvSQupVG7X88fjjdYScf"|"Times Are Changing"|"Astrality"|"Times Are Changing"|"https://i.scdn.co/image/ab67616d00001e02309cdb3f797f58db6e0465b2"|
 |5|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
-|6|"3Oj3qgVvYddVbPrNBDEWO3"|"The Times They Are a-Changin’"|"Viktor Kvist"|"The Times They Are a-Changin’"|"https://i.scdn.co/image/ab67616d00001e02f8ef673176fdf7a8358cbcde"|
+|6|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
 |7|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
-|8|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|8|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
 |9|"4yGS6Y7ygZJ4l5wnVfbPwz"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By"|"https://i.scdn.co/image/ab67616d00001e021ee769ec169b3dd47257d671"|
-|10|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
+|10|"4fYeRpiNyejUfkgskbhqmz"|"The Times They Are a-Changin (Campaign Zero)"|"Goth Babe"|"The Times They Are a-Changin (Campaign Zero)"|"https://i.scdn.co/image/ab67616d00001e022b86118a6322dd163546fb70"|
 
 ```matlab
 max_v = height(T);
@@ -84,50 +82,26 @@ track_features = struct with fields:
 ```
 
 ```matlab
-plotFeatures(track_features)
+if true
+    plotFeatures(track_features)
+end
 ```
 
 ![figure_1.png](README_media/figure_1.png)
 
-## Index playlist
-```matlab
-playlist = readtable("music/data/streaming_history.csv","TextType","string");
-playlistIds = playlist.id;
-features = table2array(playlist(:,{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'}))
-```
-
-```matlabTextOutput
-features = 61x7
-    0.8870    0.3890    0.3960         0    0.0828    0.0332    0.5850
-    0.7000    0.6080    0.3220    0.0030    0.0724    0.0431    0.2740
-    0.0015    0.5140    0.7300    0.0001    0.0897    0.0598    0.3340
-    0.5250    0.6700    0.3650         0    0.0575    0.0564    0.4500
-    0.6000    0.7910    0.3290    0.8630    0.1930    0.0592    0.5260
-    0.0211    0.4960    0.7390    0.0044    0.1060    0.0415    0.3780
-    0.4250    0.5320    0.6630    0.0000    0.0734    0.0292    0.7560
-    0.0561    0.6480    0.7850         0    0.1480    0.1650    0.9430
-    0.0229    0.3340    0.8100         0    0.3130    0.0380    0.6320
-    0.0209    0.4170    0.6300    0.0134    0.0543    0.0898    0.3410
-
-```
-
-```matlab
-knnModel = createns(features,'Distance','cosine');
-```
-
 ## Recommendation
 ```matlab
-playlist{1,"name"} % seed
-```
-
-```matlabTextOutput
-ans = "The Times They Are A-Changin'"
-```
-
-```matlab
+% index playlist as source of recommendations
+playlist = readtable("music/data/streaming_history.csv","TextType","string");
+playlistIds = playlist.id;
+features = table2array(playlist(:,{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'}));
+knnModel = createns(features,'Distance','cosine');
+% default seeding with first element of the playlist
+% playlist{1,"name"}
+% features(1,:)
 k = 5;
-[indices, ~] = knnsearch(knnModel, features(1,:), 'K', k +1);
-recoIds = playlistIds(indices(2:end));
+[indices, ~] = knnsearch(knnModel, struct2array(track_features), 'K', k);
+recoIds = playlistIds(indices);
 playlist(indices,"name")
 ```
 | |name|
@@ -137,10 +111,9 @@ playlist(indices,"name")
 |3|"Angie"|
 |4|"Take Five"|
 |5|"The Wind"|
-|6|"A Horse with No Name"|
 
 ```matlab
-r = 1;
+r = 2;
 dispTrackDetails(sp,recoIds(r))
 ```
 
@@ -154,14 +127,7 @@ URL: https://open.spotify.com/track/2o0hVSbnkdvDDKKVNaUxnB
 ![figure_2.png](README_media/figure_2.png)
 
 ```matlab
-recoFeatures = playlist([1,indices(r+1)],{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'})
-```
-| |acousticness|danceability|energy|instrumentalness|liveness|speechiness|valence|
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|1|0.8870|0.3890|0.3960|0|0.0828|0.0332|0.5850|
-|2|0.8080|0.3770|0.3370|0|0.2380|0.0341|0.5450|
-
-```matlab
+recoFeatures = [struct2table(track_features);playlist(indices(r),{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'})];
 plotMultipleFeatures(recoFeatures)
 ```
 
@@ -376,4 +342,23 @@ end
 
 ```matlab
 export livescript.mlx README.md;
+```
+
+```matlabTextOutput
+Index exceeds array bounds.
+
+Error in latex2markdown (line 229)
+    markdown = latexTabular2Markdown(markdown, alignments{k}, tabulars{k}, options);
+
+Error in convertLaTeX2Markdown (line 99)
+mdText = latex2markdown(texText, texFilename, options{:});
+
+Error in matlab.desktop.editor.export.MarkdownExporter/export (line 53)
+            result = convertLaTeX2Markdown(newOptions);
+
+Error in matlab.desktop.editor.internal.exportDocumentByID (line 89)
+  result = exporter.export(editorID, options);
+
+Error in export (line 148)
+outputAbsoluteFilename = matlab.desktop.editor.internal.exportDocumentByID(id, options{:});
 ```
