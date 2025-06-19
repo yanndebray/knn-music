@@ -16,6 +16,8 @@ Explain K\-Nearest Neighbors to recommend music
  
 &emsp;&emsp;[Helpers](#helpers)
  
+&emsp;&emsp;[Bonus](#bonus)
+ 
 <a name="endToc"></a>
 
 ## Setup
@@ -43,17 +45,18 @@ T = searchTrack(sp,query)
 |:--:|:--:|:--:|:--:|:--:|:--:|
 |1|"0HaSK4Tw1IHqvyoYJTqoYz"|"Seize the Night"|"Will Varley"|"Postcards from Ursa Minor"|"https://i.scdn.co/image/ab67616d00001e02e687b505e69d3937acadd092"|
 |2|"52vA3CYKZqZVdQnzRrdZt6"|"The Times They Are A-Changin'"|"Bob Dylan"|"The Times They Are A-Changin'"|"https://i.scdn.co/image/ab67616d00001e023b812eed53f0d7e134fe446e"|
-|3|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
+|3|"7l6rV93uTA1bYdJISGiwoV"|"Seize the Night - Live from 2000 Trees Festival"|"Will Varley"|"Xtra Mile High Club, Vol. 7: Truckin'"|"https://i.scdn.co/image/ab67616d00001e02a72c067c9fd99dd1dce4b2a4"|
 |4|"2ekvSQupVG7X88fjjdYScf"|"Times Are Changing"|"Astrality"|"Times Are Changing"|"https://i.scdn.co/image/ab67616d00001e02309cdb3f797f58db6e0465b2"|
-|5|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
-|6|"3Oj3qgVvYddVbPrNBDEWO3"|"The Times They Are a-Changin’"|"Viktor Kvist"|"The Times They Are a-Changin’"|"https://i.scdn.co/image/ab67616d00001e02f8ef673176fdf7a8358cbcde"|
-|7|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
-|8|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
-|9|"1rjv0ZWcj1WcqmzbbUuEBa"|"Let Me Get By - Live"|"Tedeschi Trucks Band"|"Live From The Fox Oakland"|"https://i.scdn.co/image/ab67616d00001e02b96fc3a0ecdea201ca7ec305"|
-|10|"1asEw2nftED92wW9t6q2ao"|"Times Have Changed"|"Ronnie Baker Brooks"|"Times Have Changed"|"https://i.scdn.co/image/ab67616d00001e024608e0aac6801f959c243340"|
+|5|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
+|6|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|7|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
+|8|"4fYeRpiNyejUfkgskbhqmz"|"The Times They Are a-Changin (Campaign Zero)"|"Goth Babe"|"The Times They Are a-Changin (Campaign Zero)"|"https://i.scdn.co/image/ab67616d00001e022b86118a6322dd163546fb70"|
+|9|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
+|10|"1YJHxl53keKuB8QywSlFhb"|"Changin'"|"Brass Construction"|"Brass Construction"|"https://i.scdn.co/image/ab67616d00001e02428317f80a438d617f31b22a"|
 
 ```matlab
 max_v = height(T);
+ 
 ```
 
 ```matlab
@@ -82,56 +85,53 @@ track_features = struct with fields:
 ```
 
 ```matlab
-if true
+if false
     plotFeatures(track_features)
 end
 ```
 
-![figure_1.png](README_media/figure_1.png)
-
 ## Recommendation
 ```matlab
 % index playlist as source of recommendations
-playlist = readtable("music/data/streaming_history.csv","TextType","string");
+playlist = readtable("todaysTopHits.csv","TextType","string");
 playlistIds = playlist.id;
 features = table2array(playlist(:,{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'}));
 knnModel = createns(features,'Distance','cosine');
-% default seeding with first element of the playlist
-% playlist{1,"name"}
-% features(1,:)
-k = 5;
+% default seeding with first element of playlist{1,"name"} / features(1,:)
+k = 6;
 [indices, ~] = knnsearch(knnModel, struct2array(track_features), 'K', k);
 recoIds = playlistIds(indices);
 playlist(indices,"name")
 ```
 | |name|
 |:--:|:--:|
-|1|"The Times They Are A-Changin'"|
-|2|"La bohème"|
-|3|"Angie"|
-|4|"Take Five"|
-|5|"The Wind"|
+|1|"blue"|
+|2|"Sailor Song"|
+|3|"Ordinary"|
+|4|"What I Want (feat. Tate McRae)"|
+|5|"No One Noticed"|
+|6|"WILDFLOWER"|
 
 ```matlab
-r = 2;
+r = 1;
 dispTrackDetails(sp,recoIds(r))
 ```
 
 ```matlabTextOutput
-Track: La bohème
-Album: La Bohème (Remastered 2014)
-Artist: Charles Aznavour
-URL: https://open.spotify.com/track/2o0hVSbnkdvDDKKVNaUxnB
+Track: blue
+Album: blue
+Artist: yung kai
+URL: https://open.spotify.com/track/3be9ACTxtcL6Zm4vJRUiPG
 ```
 
-![figure_2.png](README_media/figure_2.png)
+![figure_1.png](README_media/figure_1.png)
 
 ```matlab
 recoFeatures = [struct2table(track_features);playlist(indices(r),{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'})];
 plotMultipleFeatures(recoFeatures)
 ```
 
-![figure_3.png](README_media/figure_3.png)
+![figure_2.png](README_media/figure_2.png)
 
 ## Helpers
 
@@ -351,6 +351,71 @@ function dispTrackDetails(sp,track_id)
     imshow(imread(string(track{'album'}{'images'}{2}{'url'})))
 end
 
+function track_ids = fetchPlaylistTracks(sp, playlist_id)
+    % FETCHPLAYLISTTRACKS gets the content of a Spotify Playlist
+    % playlist_id = "37i9dQZF1DXcBWIGoYBM5M" % Today's Top Hits
+    % TRACK_IDS = FETCHPLAYLISTTRACKS(SP, PLAYLIST_ID) returns a list of tracks
+
+    % Python code input
+    pycode = [...
+    "import spotipy",...
+    "from typing import List",...
+    "def fetch_playlist_tracks(sp: spotipy.Spotify, playlist_id: str) -> List[str]:",...
+    "    """"""Return every track ID inside a playlist (handles pagination).""""""",...
+    "    track_ids = []",...
+    "    results = sp.playlist_items(playlist_id, additional_types=[""track""], limit=100)",...
+    "    track_ids.extend([",...
+    "        item[""track""][""id""]",...
+    "        for item in results[""items""]",...
+    "        if item.get(""track"") and item[""track""].get(""id"")",...
+    "    ])",...
+    "    while results[""next""]:",...
+    "        results = sp.next(results)",...
+    "        track_ids.extend([",...
+    "            item[""track""][""id""]",...
+    "            for item in results[""items""]",...
+    "            if item.get(""track"") and item[""track""].get(""id"")",...
+    "        ])",...
+    "    return track_ids",...
+    "",...
+    "t = fetch_playlist_tracks(sp, playlist_id)"...
+    ];
+    
+    try
+        t = pyrun(pycode, "t", "sp", sp, "playlist_id", playlist_id);
+    catch ME
+        % Clear temporary variables from workspace and from Python
+        clear pycode;
+        if ME.identifier == "MATLAB:Python:PyException"
+            pyrun("del sp, playlist_id");
+        end
+        rethrow(ME)
+    end
+    % Clear temporary variables from workspace and from Python
+    clear pycode;
+    pyrun("del sp, playlist_id");
+    track_ids = string(t);
+end
+```
+
+## Bonus
+
+Get features from spotify playlists
+
+```matlab
+% playlist_id = "4ANPW38qMEYQ3Z1mVLrtmm"; % lofi
+playlist_id = "37i9dQZF1DXcBWIGoYBM5M"; % Today's Top Hits
+track_ids = fetchPlaylistTracks(sp, playlist_id);
+F = table();
+for tid = track_ids
+    F = [F;struct2table(getFeatures(sp,tid))];
+end
+F.id = track_ids';
+tracks = sp.tracks(py.list(cellstr(track_ids))); % works with list up to 50 tracks
+% tracks{'tracks'}{1}{'name'}
+track_name = pyrun("l = [t['name'] for t in tracks['tracks']]","l","tracks",tracks);
+F.name = string(track_name)';
+writetable(F,'todaysTopHits.csv')
 ```
 
 ```matlab
