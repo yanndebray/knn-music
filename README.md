@@ -48,7 +48,7 @@ T = searchTrack(sp,query)
 |3|"7l6rV93uTA1bYdJISGiwoV"|"Seize the Night - Live from 2000 Trees Festival"|"Will Varley"|"Xtra Mile High Club, Vol. 7: Truckin'"|"https://i.scdn.co/image/ab67616d00001e02a72c067c9fd99dd1dce4b2a4"|
 |4|"2ekvSQupVG7X88fjjdYScf"|"Times Are Changing"|"Astrality"|"Times Are Changing"|"https://i.scdn.co/image/ab67616d00001e02309cdb3f797f58db6e0465b2"|
 |5|"0XLErri8gfXecR6NWR71bY"|"Talking New Bob Dylan"|"Loudon Wainwright III"|"History"|"https://i.scdn.co/image/ab67616d00001e028fc36d961982558394df9257"|
-|6|"0IvdJ0V3Sl6ClrmJLrGEUV"|"The Times They Are a-Changin' - Live at Madison Square Garden, New York, NY - October 1992"|"Tracy Chapman"|"Bob Dylan - 30th Anniversary Concert Celebration [(Deluxe Edition) [Remastered]]"|"https://i.scdn.co/image/ab67616d00001e0283d8116743c8b818a18666c5"|
+|6|"3Oj3qgVvYddVbPrNBDEWO3"|"The Times They Are a-Changin’"|"Viktor Kvist"|"The Times They Are a-Changin’"|"https://i.scdn.co/image/ab67616d00001e02f8ef673176fdf7a8358cbcde"|
 |7|"0GONea6G2XdnHWjNZd6zt3"|"Summer Of '69"|"Bryan Adams"|"Reckless (30th Anniversary / Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e02cf1fee2a55e98e22bf358512"|
 |8|"4fYeRpiNyejUfkgskbhqmz"|"The Times They Are a-Changin (Campaign Zero)"|"Goth Babe"|"The Times They Are a-Changin (Campaign Zero)"|"https://i.scdn.co/image/ab67616d00001e022b86118a6322dd163546fb70"|
 |9|"7t6RtYgqSMb0uQH4PpPHCn"|"Let Me Get By"|"Tedeschi Trucks Band"|"Let Me Get By (Deluxe Edition)"|"https://i.scdn.co/image/ab67616d00001e023d9f33eba9a843cca32e80d1"|
@@ -85,15 +85,17 @@ track_features = struct with fields:
 ```
 
 ```matlab
-if false
+if true
     plotFeatures(track_features)
 end
 ```
 
+![figure_1.png](README_media/figure_1.png)
+
 ## Recommendation
 ```matlab
 % index playlist as source of recommendations
-playlist = readtable("todaysTopHits.csv","TextType","string");
+playlist = readtable("music/data/streaming_history.csv","TextType","string"); % alternate with todaysTopHits.csv
 playlistIds = playlist.id;
 features = table2array(playlist(:,{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'}));
 knnModel = createns(features,'Distance','cosine');
@@ -105,33 +107,33 @@ playlist(indices,"name")
 ```
 | |name|
 |:--:|:--:|
-|1|"blue"|
-|2|"Sailor Song"|
-|3|"Ordinary"|
-|4|"What I Want (feat. Tate McRae)"|
-|5|"No One Noticed"|
-|6|"WILDFLOWER"|
+|1|"The Times They Are A-Changin'"|
+|2|"La bohème"|
+|3|"Angie"|
+|4|"Take Five"|
+|5|"The Wind"|
+|6|"A Horse with No Name"|
 
 ```matlab
-r = 1;
+r = 2;
 dispTrackDetails(sp,recoIds(r))
 ```
 
 ```matlabTextOutput
-Track: blue
-Album: blue
-Artist: yung kai
-URL: https://open.spotify.com/track/3be9ACTxtcL6Zm4vJRUiPG
+Track: La bohème
+Album: La Bohème (Remastered 2014)
+Artist: Charles Aznavour
+URL: https://open.spotify.com/track/2o0hVSbnkdvDDKKVNaUxnB
 ```
 
-![figure_1.png](README_media/figure_1.png)
+![figure_2.png](README_media/figure_2.png)
 
 ```matlab
 recoFeatures = [struct2table(track_features);playlist(indices(r),{'acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'})];
 plotMultipleFeatures(recoFeatures)
 ```
 
-![figure_2.png](README_media/figure_2.png)
+![figure_3.png](README_media/figure_3.png)
 
 ## Helpers
 
@@ -403,19 +405,19 @@ end
 Get features from spotify playlists
 
 ```matlab
-% playlist_id = "4ANPW38qMEYQ3Z1mVLrtmm"; % lofi
-playlist_id = "37i9dQZF1DXcBWIGoYBM5M"; % Today's Top Hits
-track_ids = fetchPlaylistTracks(sp, playlist_id);
-F = table();
-for tid = track_ids
-    F = [F;struct2table(getFeatures(sp,tid))];
-end
-F.id = track_ids';
-tracks = sp.tracks(py.list(cellstr(track_ids))); % works with list up to 50 tracks
-% tracks{'tracks'}{1}{'name'}
-track_name = pyrun("l = [t['name'] for t in tracks['tracks']]","l","tracks",tracks);
-F.name = string(track_name)';
-writetable(F,'todaysTopHits.csv')
+% % playlist_id = "4ANPW38qMEYQ3Z1mVLrtmm"; % lofi
+% playlist_id = "37i9dQZF1DXcBWIGoYBM5M"; % Today's Top Hits
+% track_ids = fetchPlaylistTracks(sp, playlist_id);
+% F = table();
+% for tid = track_ids
+%     F = [F;struct2table(getFeatures(sp,tid))];
+% end
+% F.id = track_ids';
+% tracks = sp.tracks(py.list(cellstr(track_ids))); % works with list up to 50 tracks
+% % tracks{'tracks'}{1}{'name'}
+% track_name = pyrun("l = [t['name'] for t in tracks['tracks']]","l","tracks",tracks);
+% F.name = string(track_name)';
+% writetable(F,'todaysTopHits.csv')
 ```
 
 ```matlab
